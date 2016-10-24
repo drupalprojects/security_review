@@ -14,7 +14,7 @@ function security_review_drush_command() {
   $items['security-review'] = array(
     'callback' => 'security_review_drush',
     'aliases' => array('secrev'),
-    'description' => "Run the Security Review checklist",
+    'description' => "Run the Security Review checklist (hotototo)",
     'options' => array(
       'store' => 'Write results to the database',
       'log' => 'Log results of each check to watchdog, defaults to off',
@@ -24,6 +24,17 @@ function security_review_drush_command() {
       'secrev' => 'Run the checklist and output the results',
       'secrev --store' => 'Run the checklist, store, and output the results',
       'secrev --lastrun' => 'Output the stored results from the last run of the checklist'
+    ),
+    'outputformat' => array(
+      'default' => 'table',
+      'pipe-format' => 'csv',
+      'fields-default' => array('message', 'status'),
+      'field-labels' => array(
+        'message' => 'Message',
+        'status' => 'Status',
+        'findings' => 'Findings',
+      ),
+      'output-data-type' => 'format-table',
     ),
   );
   $items['password-check-setup'] = array(
@@ -57,6 +68,8 @@ function security_review_drush() {
   $log = drush_get_option('log');
   $lastrun = drush_get_option('lastrun');
   $checklist = module_invoke_all('security_checks');
+
+  $output = array();
   if (!$lastrun) {
     // Unset file_perms of security_review because drush is running as a
     // different user.
@@ -80,21 +93,15 @@ function security_review_drush() {
     if ($store) {
       security_review_store_results($checklist_results);
     }
-    // Print results.
+    // Collect results.
     foreach ($checklist_results as $module => $checks) {
       foreach ($checks as $check_name => $check) {
-        if (is_null($check['result'])) {
-          // Do nothing if result is NULL.
-        }
-        elseif ($check['result']) {
-          $message = $check['title'];
-          $status = 'success';
-          drush_log($message, $status);
-        }
-        else {
-          $message = $check['title'];
-          $status = 'error';
-          drush_log($message, $status);
+        $check_name = $module . '-' . $check_name;
+        if (!is_null($check['result'])) {
+          $status = $check['result'] ? 'success' : 'error';
+          if ($check_result = _security_review_drush_format_result($check, $status)) {
+            $output[$check_name] = $check_result;
+          }
         }
       }
     }
@@ -105,21 +112,32 @@ function security_review_drush() {
     while ($result = db_fetch_array($results)) {
       $checks[] = $result;
     }
-    // Print results.
+    // Collect results.
     if (!empty($checks)) {
       foreach ($checks as $check) {
-        if ($check['result']) {
-          $message = $checklist[$check['namespace']][$check['reviewcheck']]['title'];
-          $status = 'success';
+        $check_name = $check['namespace'] . '-' . $check['reviewcheck'];
+        $check_data = array_merge($check, $checklist[$check['namespace']][$check['reviewcheck']]);
+        $status = $check['result'] ? 'success' : 'error';
+        if ($check_result = _security_review_drush_format_result($check_data, $status)) {
+          $output[$check_name] = $check_result;
         }
-        else {
-          $message = $checklist[$check['namespace']][$check['reviewcheck']]['title'];
-          $status = 'error';
-        }
-        drush_log($message, $status);
       }
     }
   }
+
+  return $output;
+}
+
+function _security_review_drush_format_result($check, $status) {
+  if (is_null($check['result'])) {
+    return;
+  }
+
+  return array(
+    'message' => $check['title'],
+    'status' => $status,
+    'findings' => $check['value'],
+  );
 }
 
 function security_review_drush_hash_setup() {
