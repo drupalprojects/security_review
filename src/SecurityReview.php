@@ -119,7 +119,7 @@ class SecurityReview {
    *   The last time Security Review has been run.
    */
   public function getLastRun() {
-    return $this->config->get('last_run');
+    return $this->state->get('last_run', 0);
   }
 
   /**
@@ -168,8 +168,7 @@ class SecurityReview {
    *   The new value for 'last_run'.
    */
   public function setLastRun($last_run) {
-    $this->config->set('last_run', $last_run);
-    $this->config->save();
+    $this->state->set('last_run', $last_run);
   }
 
   /**

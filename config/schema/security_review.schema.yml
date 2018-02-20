@@ -14,9 +14,6 @@ security_review.settings:
     log:
       type: boolean
       label: 'Logging enabled'
-    last_run:
-      type: integer
-      label: 'Last run'
 
 # Defines a security check's skip informations and settings.
 security_review.check.*:
