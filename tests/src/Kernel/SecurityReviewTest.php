@@ -1,13 +1,8 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Tests\SecurityReviewTest.
- */
+namespace Drupal\Tests\security_review\Kernel;
 
-namespace Drupal\security_review\Tests;
-
-use Drupal\simpletest\KernelTestBase;
+use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Contains tests related to the SecurityReview class.
@@ -61,21 +56,21 @@ class SecurityReviewTest extends KernelTestBase {
    * Tests the 'untrusted_roles' setting.
    */
   public function testConfigUntrustedRoles() {
-    $this->assertEqual($this->securityReview->getUntrustedRoles(), [], 'untrusted_roles empty by default.');
+    $this->assertEquals([], $this->securityReview->getUntrustedRoles(), 'untrusted_roles empty by default.');
 
     $roles = [0, 1, 2, 3, 4];
     $this->securityReview->setUntrustedRoles($roles);
-    $this->assertEqual($roles, $this->securityReview->getUntrustedRoles(), 'untrusted_roles set to test array.');
+    $this->assertEquals($roles, $this->securityReview->getUntrustedRoles(), 'untrusted_roles set to test array.');
   }
 
   /**
    * Tests the 'last_run' setting.
    */
   public function testConfigLastRun() {
-    $this->assertEqual(0, $this->securityReview->getLastRun(), 'last_run is 0 by default.');
+    $this->assertEquals(0, $this->securityReview->getLastRun(), 'last_run is 0 by default.');
     $time = time();
     $this->securityReview->setLastRun($time);
-    $this->assertEqual($time, $this->securityReview->getLastRun(), 'last_run set to now.');
+    $this->assertEquals($time, $this->securityReview->getLastRun(), 'last_run set to now.');
   }
 
 }

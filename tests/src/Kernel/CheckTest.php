@@ -1,14 +1,9 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Tests\CheckTest.
- */
+namespace Drupal\Tests\security_review\Kernel;
 
-namespace Drupal\security_review\Tests;
-
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\security_review\CheckResult;
-use Drupal\simpletest\KernelTestBase;
 
 /**
  * Contains tests for Checks.
@@ -58,7 +53,7 @@ class CheckTest extends KernelTestBase {
   /**
    * Tests whether $checks is empty.
    */
-  protected function testChecksExist() {
+  public function testChecksExist() {
     $this->assertFalse(empty($this->checks), 'Checks found.');
   }
 
@@ -82,7 +77,7 @@ class CheckTest extends KernelTestBase {
     foreach ($this->checks as $check) {
       if (array_key_exists($check->id(), $defaults)) {
         $result = $check->run();
-        $this->assertEqual($result->result(), $defaults[$check->id()], $check->getTitle() . ' produced the right result.');
+        $this->assertEquals($defaults[$check->id()], $result->result(), $check->getTitle() . ' produced the right result.');
       }
     }
   }
@@ -98,11 +93,11 @@ class CheckTest extends KernelTestBase {
 
       // Compare lastResult() with $result.
       $last_result = $check->lastResult(TRUE);
-      $this->assertEqual($result->result(), $last_result->result(), 'Result stored.');
-      $this->assertEqual($result->time(), $last_result->time(), 'Time stored.');
+      $this->assertEquals($result->result(), $last_result->result(), 'Result stored.');
+      $this->assertEquals($result->time(), $last_result->time(), 'Time stored.');
       if ($check->storesFindings()) {
         // If storesFindings() is set to FALSE, then these could differ.
-        $this->assertEqual($result->findings(), $last_result->findings(), 'Findings stored.');
+        $this->assertEquals($result->findings(), $last_result->findings(), 'Findings stored.');
       }
     }
   }
@@ -134,7 +129,7 @@ class CheckTest extends KernelTestBase {
 
         // Check if lastResult()'s result integer is the same as $result's.
         $last_result = $check->lastResult(TRUE);
-        $this->assertEqual($last_result->result(), $result->result(), 'Invalid result got updated.');
+        $this->assertEquals($result->result(), $last_result->result(), 'Invalid result got updated.');
       }
     }
   }

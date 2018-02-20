@@ -9,9 +9,9 @@ namespace Drupal\security_review\Controller;
 
 use Drupal\Core\Access\CsrfTokenGenerator;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\security_review\Checklist;
-use Drupal\security_review\CheckResult;
 use Drupal\security_review\SecurityReview;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -137,25 +137,21 @@ class ChecklistController extends ControllerBase {
       }
 
       // Determine help link.
-      $check_info['help_link'] = $this->l(
+      $check_info['help_link'] = Link::createFromRoute(
         'Details',
-        Url::fromRoute(
-          'security_review.help',
-          [
-            'namespace' => $check->getMachineNamespace(),
-            'title' => $check->getMachineTitle(),
-          ]
-        )
+        'security_review.help',
+        [
+          'namespace' => $check->getMachineNamespace(),
+          'title' => $check->getMachineTitle(),
+        ]
       );
 
       // Add toggle button.
       $toggle_text = $check->isSkipped() ? 'Enable' : 'Skip';
-      $check_info['toggle_link'] = $this->l($toggle_text,
-        Url::fromRoute(
-          'security_review.toggle',
-          ['check_id' => $check->id()],
-          ['query' => ['token' => $this->csrfToken->get($check->id())]]
-        )
+      $check_info['toggle_link'] = Link::createFromRoute($toggle_text,
+        'security_review.toggle',
+        ['check_id' => $check->id()],
+        ['query' => ['token' => $this->csrfToken->get($check->id())]]
       );
 
       // Add to array of completed checks.

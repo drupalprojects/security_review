@@ -7,7 +7,6 @@
 
 namespace Drupal\security_review\Checks;
 
-use Drupal\Core\Entity\Entity;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\TypedData\TypedDataInterface;
 use Drupal\security_review\Check;
@@ -138,9 +137,9 @@ class Field extends Check {
           ->load($entity_id);
 
         foreach ($fields as $field => $finding) {
-          $url = $entity->urlInfo('edit-form');
+          $url = $entity->toUrl('edit-form');
           if ($url === NULL) {
-            $url = $entity->urlInfo();
+            $url = $entity->toUrl();
           }
           $items[] = $this->t(
             '@vulnerabilities found in <em>@field</em> field of <a href=":url">@label</a>',
@@ -148,7 +147,7 @@ class Field extends Check {
               '@vulnerabilities' => implode(' and ', $finding),
               '@field' => $field,
               '@label' => $entity->label(),
-              ':url' => $url,
+              ':url' => $url->toString(),
             ]
           );
         }
@@ -179,9 +178,9 @@ class Field extends Check {
           ->load($entity_id);
 
         foreach ($fields as $field => $finding) {
-          $url = $entity->urlInfo('edit-form');
+          $url = $entity->toUrl('edit-form');
           if ($url === NULL) {
-            $url = $entity->url();
+            $url = $entity->toUrl();
           }
           $output .= "\t" . $this->t(
               '@vulnerabilities in @field of :link',

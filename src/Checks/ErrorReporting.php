@@ -7,7 +7,7 @@
 
 namespace Drupal\security_review\Checks;
 
-use Drupal\Core\Url;
+use Drupal\Core\Link;
 use Drupal\security_review\Check;
 use Drupal\security_review\CheckResult;
 
@@ -73,9 +73,9 @@ class ErrorReporting extends Check {
 
     $paragraphs = [];
     $paragraphs[] = $this->t('You have error reporting set to both the screen and the log.');
-    $paragraphs[] = $this->l(
+    $paragraphs[] = Link::createFromRoute(
       $this->t('Alter error reporting settings.'),
-      Url::fromRoute('system.logging_settings')
+      'system.logging_settings'
     );
 
     return [

@@ -8,7 +8,8 @@
 namespace Drupal\security_review\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Url;
+use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Link;
 use Drupal\security_review\Checklist;
 use Drupal\security_review\CheckResult;
 use Drupal\security_review\SecurityReview;
@@ -35,17 +36,27 @@ class HelpController extends ControllerBase {
   protected $securityReview;
 
   /**
+   * The date.formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  private $dateFormatter;
+
+  /**
    * Constructs a HelpController.
    *
    * @param \Drupal\security_review\SecurityReview $security_review
    *   The security_review service.
    * @param \Drupal\security_review\Checklist $checklist
    *   The security_review.checklist service.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
+   *   The date.formatter service.
    */
-  public function __construct(SecurityReview $security_review, Checklist $checklist) {
+  public function __construct(SecurityReview $security_review, Checklist $checklist, DateFormatterInterface $dateFormatter) {
     // Store the dependencies.
     $this->checklist = $checklist;
     $this->securityReview = $security_review;
+    $this->dateFormatter = $dateFormatter;
   }
 
   /**
@@ -54,7 +65,8 @@ class HelpController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('security_review'),
-      $container->get('security_review.checklist')
+      $container->get('security_review.checklist'),
+      $container->get('date.formatter')
     );
   }
 
@@ -106,12 +118,13 @@ class HelpController extends ControllerBase {
       }
 
       // Add the link pointing to the check-specific help.
-      $check_namespace['check_links'][] = $this->l(
+      $check_namespace['check_links'][] = Link::createFromRoute(
         $this->t('@title', ['@title' => $check->getTitle()]),
-        Url::fromRoute('security_review.help', [
+        'security_review.help',
+        [
           'namespace' => $check->getMachineNamespace(),
           'title' => $check->getMachineTitle(),
-        ])
+        ]
       );
     }
 
@@ -154,10 +167,7 @@ class HelpController extends ControllerBase {
     if ($check->isSkipped()) {
 
       if ($check->skippedBy() != NULL) {
-        $user = $this->l(
-          $check->skippedBy()->getUsername(),
-          $check->skippedBy()->urlInfo()
-        );
+        $user = $check->skippedBy()->link();
       }
       else {
         $user = 'Anonymous';
@@ -166,7 +176,7 @@ class HelpController extends ControllerBase {
       $skip_message = $this->t(
         'Check marked for skipping on @date by @user',
         [
-          '@date' => format_date($check->skippedOn()),
+          '@date' => $this->dateFormatter->format($check->skippedOn()),
           '@user' => $user,
         ]
       );

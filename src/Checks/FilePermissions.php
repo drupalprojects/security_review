@@ -7,6 +7,7 @@
 
 namespace Drupal\security_review\Checks;
 
+use Drupal\Core\Link;
 use Drupal\Core\StreamWrapper\PrivateStream;
 use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\Core\Url;
@@ -106,7 +107,7 @@ class FilePermissions extends Check {
     $paragraphs = [];
     $paragraphs[] = $this->t('It is dangerous to allow the web server to write to files inside the document root of your server. Doing so could allow Drupal to write files that could then be executed. An attacker might use such a vulnerability to take control of your site. An exception is the Drupal files, private files, and temporary directories which Drupal needs permission to write to in order to provide features like file attachments.');
     $paragraphs[] = $this->t('In addition to inspecting existing directories, this test attempts to create and write to your file system. Look in your security_review module directory on the server for files named file_write_test.YYYYMMDDHHMMSS and for a file called IGNOREME.txt which gets a timestamp appended to it if it is writeable.');
-    $paragraphs[] = $this->l(
+    $paragraphs[] = new Link(
       $this->t('Read more about file system permissions in the handbooks.'),
       Url::fromUri('http://drupal.org/node/244924')
     );

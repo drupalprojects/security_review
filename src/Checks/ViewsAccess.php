@@ -7,7 +7,7 @@
 
 namespace Drupal\security_review\Checks;
 
-use Drupal\Core\Url;
+use Drupal\Core\Link;
 use Drupal\security_review\Check;
 use Drupal\security_review\CheckResult;
 use Drupal\views\Entity\View;
@@ -98,15 +98,13 @@ class ViewsAccess extends Check {
       /** @var View $view */
 
       foreach ($displays as $display) {
-        $items[] = $this->l(
+        $items[] = Link::createFromRoute(
           $view->label() . ': ' . $display,
-          Url::fromRoute(
-            'entity.view.edit_display_form',
-            [
-              'view' => $view_id,
-              'display_id' => $display,
-            ]
-          )
+          'entity.view.edit_display_form',
+          [
+            'view' => $view_id,
+            'display_id' => $display,
+          ]
         );
       }
     }

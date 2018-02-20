@@ -9,7 +9,6 @@ namespace Drupal\security_review\Checks;
 
 use Drupal\Component\PhpStorage\FileStorage;
 use Drupal\Core\StreamWrapper\PublicStream;
-use Drupal\Core\Url;
 use Drupal\security_review\Check;
 use Drupal\security_review\CheckResult;
 use GuzzleHttp\Exception\RequestException;

@@ -7,7 +7,7 @@
 
 namespace Drupal\security_review\Checks;
 
-use Drupal\Core\Url;
+use Drupal\Core\Link;
 use Drupal\security_review\Check;
 use Drupal\security_review\CheckResult;
 use Drupal\user\Entity\Role;
@@ -93,13 +93,11 @@ class AdminPermissions extends Check {
       $paragraphs[] = $this->t(
         "@role has the following restricted permissions:",
         [
-          '@role' => $this->l(
+          '@role' => Link::createFromRoute(
             $role->label(),
-            Url::fromRoute(
-              'entity.user_role.edit_permissions_form',
-              ['user_role' => $role->id()]
-            )
-          ),
+            'entity.user_role.edit_permissions_form',
+            ['user_role' => $role->id()]
+          )->toString(),
         ]
       );
 

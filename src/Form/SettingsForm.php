@@ -7,8 +7,8 @@
 
 namespace Drupal\security_review\Form;
 
-use Drupal\Component\Utility\SafeMarkup;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -44,6 +44,13 @@ class SettingsForm extends ConfigFormBase {
   protected $securityReview;
 
   /**
+   * The date.formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  private $dateFormatter;
+
+  /**
    * Constructs a SettingsForm.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -54,12 +61,15 @@ class SettingsForm extends ConfigFormBase {
    *   The security_review.security service.
    * @param \Drupal\security_review\SecurityReview $security_review
    *   The security_review service.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
+   *   The date.formatter service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, Checklist $checklist, Security $security, SecurityReview $security_review) {
+  public function __construct(ConfigFactoryInterface $config_factory, Checklist $checklist, Security $security, SecurityReview $security_review, DateFormatterInterface $dateFormatter) {
     parent::__construct($config_factory);
     $this->checklist = $checklist;
     $this->security = $security;
     $this->securityReview = $security_review;
+    $this->dateFormatter = $dateFormatter;
   }
 
   /**
@@ -70,7 +80,8 @@ class SettingsForm extends ConfigFormBase {
       $container->get('config.factory'),
       $container->get('security_review.checklist'),
       $container->get('security_review.security'),
-      $container->get('security_review')
+      $container->get('security_review'),
+      $container->get('date.formatter')
     );
   }
 
@@ -92,7 +103,7 @@ class SettingsForm extends ConfigFormBase {
     $roles = user_roles();
     $options = [];
     foreach ($roles as $rid => $role) {
-      $options[$rid] = SafeMarkup::checkPlain($role->label());
+      $options[$rid] = $role->label();
     }
 
     // Notify the user if anonymous users can create accounts.
@@ -139,7 +150,7 @@ class SettingsForm extends ConfigFormBase {
           [
             '@name' => $check->getTitle(),
             '@uid' => $check->skippedBy()->id(),
-            '@date' => format_date($check->skippedOn()),
+            '@date' => $this->dateFormatter->format($check->skippedOn()),
           ]
         );
       }

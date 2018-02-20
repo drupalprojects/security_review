@@ -135,7 +135,7 @@ function template_preprocess_run_and_review(&$variables) {
   }
 
   // Format date.
-  $variables['date'] = format_date($variables['date']);
+  $variables['date'] = \Drupal::service('date.formatter')->format($variables['date']);
 
   // Convert check result integers to strings.
   foreach ($variables['checks'] as &$check) {

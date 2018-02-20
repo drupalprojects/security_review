@@ -7,6 +7,7 @@
 
 namespace Drupal\security_review\Checks;
 
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\security_review\Check;
 use Drupal\security_review\CheckResult;
@@ -143,7 +144,7 @@ class TrustedHosts extends Check {
     $paragraphs[] = $this->t('This site is responding from the URL: :url.', [':url' => $base_url]);
     $paragraphs[] = $this->t('If the site should be available only at that URL it is recommended that you set it as the $base_url variable in the settings.php file at @file.', ['@file' => $settings_php]);
     $paragraphs[] = $this->t('If the site has multiple URLs it can respond from you should whitelist host patterns with trusted_host_patterns in settings.php.');
-    $paragraphs[] = $this->l($this->t('Read more about HTTP Host Header attacks and setting trusted_host_patterns.'), Url::fromUri('https://www.drupal.org/node/1992030'));
+    $paragraphs[] = new Link($this->t('Read more about HTTP Host Header attacks and setting trusted_host_patterns.'), Url::fromUri('https://www.drupal.org/node/1992030'));
 
     return [
       '#theme' => 'check_evaluation',

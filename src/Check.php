@@ -9,8 +9,6 @@ namespace Drupal\security_review;
 
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Logger\RfcLogLevel;
-use Drupal\Core\Routing\LinkGeneratorTrait;
-use Drupal\Core\Routing\UrlGeneratorTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\Entity\User;
 
@@ -20,8 +18,6 @@ use Drupal\user\Entity\User;
 abstract class Check {
 
   use DependencySerializationTrait;
-  use LinkGeneratorTrait;
-  use UrlGeneratorTrait;
   use StringTranslationTrait;
 
   /**

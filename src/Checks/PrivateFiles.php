@@ -7,8 +7,8 @@
 
 namespace Drupal\security_review\Checks;
 
+use Drupal\Core\Link;
 use Drupal\Core\StreamWrapper\PrivateStream;
-use Drupal\Core\Url;
 use Drupal\security_review\Check;
 use Drupal\security_review\CheckResult;
 
@@ -77,9 +77,9 @@ class PrivateFiles extends Check {
 
     $paragraphs = [];
     $paragraphs[] = $this->t('Your files directory is not outside of the server root.');
-    $paragraphs[] = $this->l(
+    $paragraphs[] = Link::createFromRoute(
       $this->t('Edit the files directory path.'),
-      Url::fromRoute('system.file_system_settings')
+      'system.file_system_settings'
     );
 
     return [

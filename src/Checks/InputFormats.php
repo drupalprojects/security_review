@@ -7,6 +7,7 @@
 
 namespace Drupal\security_review\Checks;
 
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\security_review\Check;
 use Drupal\security_review\CheckResult;
@@ -104,7 +105,7 @@ class InputFormats extends Check {
   public function help() {
     $paragraphs = [];
     $paragraphs[] = $this->t("Certain HTML tags can allow an attacker to take control of your site. Drupal's input format system makes use of a set filters to run on incoming text. The 'HTML Filter' strips out harmful tags and Javascript events and should be used on all formats accessible by untrusted users.");
-    $paragraphs[] = $this->l(
+    $paragraphs[] = new Link(
       $this->t("Read more about Drupal's input formats in the handbooks."),
       Url::fromUri('http://drupal.org/node/224921')
     );
@@ -124,9 +125,9 @@ class InputFormats extends Check {
 
     if (!empty($result->findings()['tags'])) {
       $paragraphs = [];
-      $paragraphs[] = $this->l(
+      $paragraphs[] = Link::createFromRoute(
         $this->t('Review your text formats.'),
-        Url::fromRoute('filter.admin_overview')
+        'filter.admin_overview'
       );
       $paragraphs[] = $this->t('It is recommended you remove the following tags from roles accessible by untrusted users.');
       $output[] = [

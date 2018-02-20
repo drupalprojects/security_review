@@ -1,14 +1,9 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Tests\ChecklistTest.
- */
+namespace Drupal\Tests\security_review\Kernel;
 
-namespace Drupal\security_review\Tests;
-
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\security_review\Checklist;
-use Drupal\simpletest\KernelTestBase;
 
 /**
  * Contains test for Checklist.
@@ -102,7 +97,7 @@ class ChecklistTest extends KernelTestBase {
       $check->skip();
     }
     Checklist::clearCache();
-    $this->assertEqual(count($this->checklist->getEnabledChecks()), 0, 'Disabled all checks.');
+    $this->assertEquals(0, count($this->checklist->getEnabledChecks()), 'Disabled all checks.');
   }
 
   /**
@@ -116,13 +111,11 @@ class ChecklistTest extends KernelTestBase {
     foreach ($this->checklist->getChecks() as $check) {
       // getCheck().
       $found = $this->checklist->getCheck($check->getMachineNamespace(), $check->getMachineTitle());
-      $this->assertNotNull($found, 'Found a check.');
-      $this->assertEqual($check->id(), $found->id(), 'Found ' . $check->getTitle() . '.');
+      $this->assertEquals($check->id(), $found->id(), 'Found ' . $check->getTitle() . '.');
 
       // getCheckById().
       $found = $this->checklist->getCheckById($check->id());
-      $this->assertNotNull($found, 'Found a check.');
-      $this->assertEqual($check->id(), $found->id(), 'Found ' . $check->getTitle() . '.');
+      $this->assertEquals($check->id(), $found->id(), 'Found ' . $check->getTitle() . '.');
     }
   }
 
