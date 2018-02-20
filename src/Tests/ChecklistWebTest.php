@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Tests\ChecklistWebTest.
- */
-
 namespace Drupal\security_review\Tests;
 
 use Drupal\security_review\Checklist;

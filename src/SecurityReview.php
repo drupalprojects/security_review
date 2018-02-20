@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\SecurityReview.
- */
-
 namespace Drupal\security_review;
 
 use Drupal\Core\Config\ConfigFactoryInterface;

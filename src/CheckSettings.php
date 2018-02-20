@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\CheckSettings.
- */
-
 namespace Drupal\security_review;
 
 use Drupal\Core\Config\Config;

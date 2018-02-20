@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Form\SettingsForm.
- */
-
 namespace Drupal\security_review\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;

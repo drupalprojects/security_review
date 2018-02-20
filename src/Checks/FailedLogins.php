@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Checks\FailedLogins.
- */
-
 namespace Drupal\security_review\Checks;
 
 use Drupal\Core\Logger\RfcLogLevel;

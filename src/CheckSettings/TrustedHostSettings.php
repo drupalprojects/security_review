@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\CheckSettings\TrustedHostSettings.
- */
-
 namespace Drupal\security_review\CheckSettings;
 
 use Drupal\security_review\CheckSettings;

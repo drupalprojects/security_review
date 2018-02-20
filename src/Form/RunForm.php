@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Form\RunForm.
- */
-
 namespace Drupal\security_review\Form;
 
 use Drupal\Core\Form\FormBase;

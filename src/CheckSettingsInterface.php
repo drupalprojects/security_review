@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\CheckSettingsInterface.
- */
-
 namespace Drupal\security_review;
 
 /**

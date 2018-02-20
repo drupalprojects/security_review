@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\CheckResult.
- */
-
 namespace Drupal\security_review;
 
 /**

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Controller\ChecklistController.
- */
-
 namespace Drupal\security_review\Controller;
 
 use Drupal\Core\Access\CsrfTokenGenerator;

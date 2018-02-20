@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Checks\TemporaryFiles.
- */
-
 namespace Drupal\security_review\Checks;
 
 use Drupal\security_review\Check;

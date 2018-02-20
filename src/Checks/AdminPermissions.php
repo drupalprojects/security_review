@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Checks\AdminPermissions.
- */
-
 namespace Drupal\security_review\Checks;
 
 use Drupal\Core\Link;

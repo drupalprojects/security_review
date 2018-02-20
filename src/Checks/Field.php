@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Checks\Field.
- */
-
 namespace Drupal\security_review\Checks;
 
 use Drupal\Core\Entity\FieldableEntityInterface;

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Checklist.
- */
-
 namespace Drupal\security_review;
 
 use Drupal\Core\Access\AccessException;

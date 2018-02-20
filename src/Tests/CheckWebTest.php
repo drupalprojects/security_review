@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review\Tests\CheckWebTest.
- */
-
 namespace Drupal\security_review\Tests;
 
 use Drupal\simpletest\WebTestBase;

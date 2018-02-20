@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review_test\Test.
- */
-
 namespace Drupal\security_review_test;
 
 use Drupal\security_review\Check;

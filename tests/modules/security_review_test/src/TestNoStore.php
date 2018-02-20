@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\security_review_test\TestNoStore.
- */
-
 namespace Drupal\security_review_test;
 
 /**
