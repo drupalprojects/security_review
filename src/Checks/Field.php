@@ -2,6 +2,8 @@
 
 namespace Drupal\security_review\Checks;
 
+use Drupal\Core\Entity\Entity;
+use Drupal\Core\Entity\Exception\UndefinedLinkTemplateException;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\security_review\Check;
 use Drupal\security_review\CheckResult;
@@ -130,17 +132,13 @@ class Field extends Check {
           ->load($entity_id);
 
         foreach ($fields as $field => $finding) {
-          $url = $entity->toUrl('edit-form');
-          if ($url === NULL) {
-            $url = $entity->toUrl();
-          }
           $items[] = $this->t(
             '@vulnerabilities found in <em>@field</em> field of <a href=":url">@label</a>',
             [
               '@vulnerabilities' => implode(' and ', $finding),
               '@field' => $field,
               '@label' => $entity->label(),
-              ':url' => $url->toString(),
+              ':url' => $this->getEntityLink($entity),
             ]
           );
         }
@@ -152,6 +150,36 @@ class Field extends Check {
       '#paragraphs' => $paragraphs,
       '#items' => $items,
     ];
+  }
+
+  /**
+   * Attempt to get a good link for the given entity.
+   *
+   * Falls back on a string with entity type id and id if no good link can
+   * be found.
+   *
+   * @param \Drupal\Core\Entity\Entity $entity
+   *   The entity.
+   *
+   * @return string
+   */
+  protected function getEntityLink(Entity $entity) {
+    try {
+      $url = $entity->toUrl('edit-form');
+    }
+    catch (UndefinedLinkTemplateException $e) {
+      $url = NULL;
+    }
+    if ($url === NULL) {
+      try {
+        $url = $entity->toUrl();
+      }
+      catch (UndefinedLinkTemplateException $e) {
+        $url = NULL;
+      }
+    }
+
+    return $url !== NULL ? $url->toString() : ($entity->getEntityTypeId() . ':' . $entity->id());
   }
 
   /**
@@ -171,16 +199,12 @@ class Field extends Check {
           ->load($entity_id);
 
         foreach ($fields as $field => $finding) {
-          $url = $entity->toUrl('edit-form');
-          if ($url === NULL) {
-            $url = $entity->toUrl();
-          }
           $output .= "\t" . $this->t(
               '@vulnerabilities in @field of :link',
               [
                 '@vulnerabilities' => implode(' and ', $finding),
                 '@field' => $field,
-                ':link' => $url->toString(),
+                ':link' => $this->getEntityLink($entity),
               ]
             ) . "\n";
         }
